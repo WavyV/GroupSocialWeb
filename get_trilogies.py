@@ -6,7 +6,7 @@ from fuzzywuzzy import fuzz
 
 # Get trilogy titles from Wikipedia
 columns = defaultdict(list)  # each value in each column is appended to a list
-with open('trilogies_wiki.csv', encoding='utf-8') as f:  # open desired file
+with open('data/trilogies_wiki.csv', encoding='utf-8') as f:  # open desired file
     reader = csv.DictReader(f, delimiter=';')  # read rows into a dictionary format
     for row in reader:  # read a row as {column1: value1, column2: value2,...}
         for (k, v) in row.items():  # go over each column name and value
@@ -24,7 +24,7 @@ for i in range(0, len(columns['title'])):
 
 # Get movie titles from movieLens data set
 columns2 = defaultdict(list)
-with open('movies_dataLens.csv', encoding='utf-8') as f:
+with open('data/movies_dataLens.csv', encoding='utf-8') as f:
     reader = csv.DictReader(f)
     for row in reader:
         for (k, v) in row.items():
