@@ -109,9 +109,7 @@ for i in range(0, len(trilogy_averages)):
             #print(trilogy_averages[i][0, 0], trilogy_averages[i][0, 1], trilogy_averages[i][0, 2],"--> 100% increase")
 
 print("Total number of trilogies are", totaltrilogies)
-print("Complete decrease in", complete_decrease, "trilogies")
-print("Complete increase in", complete_increase, "trilogies")
 percentage_decrease = (complete_decrease/totaltrilogies)*100
 percentage_increase = (complete_increase/totaltrilogies)*100
-print("Decreasing trilogies in", round(percentage_decrease), "%")
-print("Increasing trilogies in", round(percentage_increase), "%")
+print("Complete decrease in", complete_decrease, "trilogies, which is in", round(percentage_decrease),"% of total trilogies")
+print("Complete increase in", complete_increase, "trilogies, which is in", round(percentage_increase),"% of total trilogies")
