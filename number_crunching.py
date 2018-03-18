@@ -76,3 +76,42 @@ plt.show()
 plt.hist(delta13)
 plt.show()
 
+totaltrilogies = 0
+complete_decrease = 0
+two_decrease_three_increase = 0
+two_increase_three_increase = 0
+complete_increase = 0
+
+for i in range(0, len(trilogy_averages)):
+    totaltrilogies = totaltrilogies + 1
+    #rating 1 > 2 > 3
+    if trilogy_averages[i][0, 0] > trilogy_averages[i][0, 1]:
+        if trilogy_averages[i][0, 1] > trilogy_averages[i][0, 2]:
+            complete_decrease = complete_decrease + 1
+            #print(trilogy_averages[i][0, 0],trilogy_averages[i][0, 1], trilogy_averages[i][0, 2],"--> 100% decrease")
+            
+    #rating 1 > 2 < 3
+    if trilogy_averages[i][0, 0] > trilogy_averages[i][0, 1]:
+        if trilogy_averages[i][0, 1] < trilogy_averages[i][0, 2]:
+            two_decrease_three_increase = two_decrease_three_increase + 1
+            #print(trilogy_averages[i][0, 0],trilogy_averages[i][0, 1], trilogy_averages[i][0, 2],"--> Second movie decrease, third increase")
+
+    #rating 1 < 2 > 3
+    if trilogy_averages[i][0, 0] < trilogy_averages[i][0, 1]:
+        if trilogy_averages[i][0, 1] > trilogy_averages[i][0, 2]:
+            two_increase_three_increase = two_increase_three_increase + 1
+            #print(trilogy_averages[i][0, 0],trilogy_averages[i][0, 1], trilogy_averages[i][0, 2],"--> Second movie increase, third decrease")
+
+    #rating 1 < 2 < 3
+    if trilogy_averages[i][0, 0] < trilogy_averages[i][0, 1]:
+        if trilogy_averages[i][0, 1] < trilogy_averages[i][0, 2]:
+            complete_increase = complete_increase + 1
+            #print(trilogy_averages[i][0, 0], trilogy_averages[i][0, 1], trilogy_averages[i][0, 2],"--> 100% increase")
+
+print("Total number of trilogies are", totaltrilogies)
+print("Complete decrease in", complete_decrease, "trilogies")
+print("Complete increase in", complete_increase, "trilogies")
+percentage_decrease = (complete_decrease/totaltrilogies)*100
+percentage_increase = (complete_increase/totaltrilogies)*100
+print("Decreasing trilogies in", round(percentage_decrease), "%")
+print("Increasing trilogies in", round(percentage_increase), "%")
