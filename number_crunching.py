@@ -3,7 +3,7 @@ import pickle
 from matplotlib import pyplot as plt
 
 # Import ratings.pckl file
-with (open('ratings.pckl', 'rb')) as f:
+with (open('data/ratings.pckl', 'rb')) as f:
     ratings_import = pickle.load(f)
 
 # Structure the ratings object such that we can easily do stuff with the numbers.
@@ -38,6 +38,7 @@ for i in range(0, len(ratings), 3):
     trilogy_nratings.append(nratings)
     trilogy_deltas.append(deltas)
 
+print(ratings)
 print(trilogy_averages)
 print(trilogy_stdev)
 print(trilogy_nratings)
@@ -50,8 +51,9 @@ for i in range(0, len(trilogy_averages)):
         if np.isnan(trilogy_averages[i][0, j]) == True:
             break
         y = trilogy_averages[i][:]
-        plt.plot(x, y[0])
-plt.show()
+        #plt.plot(x, y[0])
+#plt.show()
+
 
 delta12 = []
 delta23 = []
@@ -67,13 +69,28 @@ for i in range(0, len(trilogy_deltas)):
         if j == 2:
             delta13.append(trilogy_deltas[i][0, 2])
 
-plt.hist(delta12)
-plt.show()
+bins = np.arange(-2.5, 2.5, 0.25)
 
-plt.hist(delta23)
-plt.show()
+fig, (ax1, ax2, ax3) = plt.subplots(3, 1, sharex=True)
 
-plt.hist(delta13)
+ax1.hist(delta12, bins)
+ax1.set_ylim([0, 35])
+ax1.text(1.5, 25, 'Movie 1 & 2')
+ax1.axvline(x=0, color='r', linestyle='--')
+
+ax2.hist(delta23, bins)
+ax2.set_ylim([0, 35])
+ax2.text(1.5, 25, 'Movie 2 & 3')
+ax2.axvline(x=0, color='r', linestyle='--')
+
+ax3.hist(delta13, bins)
+ax3.set_ylim([0, 35])
+ax3.text(1.5, 25, 'Movie 1 & 3')
+ax3.axvline(x=0, color='r', linestyle='--')
+ax3.set_xlabel('Difference in Average Rating')
+
+
+fig.subplots_adjust(hspace=0.05)
 plt.show()
 
 totaltrilogies = 0
@@ -82,31 +99,46 @@ two_decrease_three_increase = 0
 two_increase_three_increase = 0
 complete_increase = 0
 
-for i in range(0, len(trilogy_averages)):
+for i in range(0, len(ratings), 3):
+    dummy_break = False
+    for j in range(0,3):
+        if np.isnan(np.average(ratings[i+j][1])) == True:
+            dummy_break = True
+
+    if dummy_break == True:
+        continue
+
+    # Otherwise we do this
+    average1 = np.average(ratings[i][1])
+    average2 = np.average(ratings[i+1][1])
+    average3 = np.average(ratings[i+2][1])
+
+
     totaltrilogies = totaltrilogies + 1
     #rating 1 > 2 > 3
-    if trilogy_averages[i][0, 0] > trilogy_averages[i][0, 1]:
-        if trilogy_averages[i][0, 1] > trilogy_averages[i][0, 2]:
-            complete_decrease = complete_decrease + 1
-            #print(trilogy_averages[i][0, 0],trilogy_averages[i][0, 1], trilogy_averages[i][0, 2],"--> 100% decrease")
+    if average1 > average2 and average2 > average3:
+        print(average1, average2, average3, '--> 100% decrease')
+        print(ratings[i][0])
+        complete_decrease = complete_decrease + 1
             
     #rating 1 > 2 < 3
-    if trilogy_averages[i][0, 0] > trilogy_averages[i][0, 1]:
-        if trilogy_averages[i][0, 1] < trilogy_averages[i][0, 2]:
-            two_decrease_three_increase = two_decrease_three_increase + 1
-            #print(trilogy_averages[i][0, 0],trilogy_averages[i][0, 1], trilogy_averages[i][0, 2],"--> Second movie decrease, third increase")
+    if average1 > average2 and average2 < average3:
+        print(average1, average2, average3, '--> 2nd decrease, 3rd increase')
+        print(ratings[i][0])
+        two_decrease_three_increase = two_decrease_three_increase + 1
 
     #rating 1 < 2 > 3
-    if trilogy_averages[i][0, 0] < trilogy_averages[i][0, 1]:
-        if trilogy_averages[i][0, 1] > trilogy_averages[i][0, 2]:
-            two_increase_three_increase = two_increase_three_increase + 1
-            #print(trilogy_averages[i][0, 0],trilogy_averages[i][0, 1], trilogy_averages[i][0, 2],"--> Second movie increase, third decrease")
+    if average1 < average2 and average2 > average3:
+        print(average1, average2, average3, '--> 2nd increase, 3rd decrease')
+        print(ratings[i][0])
+        two_increase_three_increase = two_increase_three_increase + 1
 
     #rating 1 < 2 < 3
-    if trilogy_averages[i][0, 0] < trilogy_averages[i][0, 1]:
-        if trilogy_averages[i][0, 1] < trilogy_averages[i][0, 2]:
-            complete_increase = complete_increase + 1
-            #print(trilogy_averages[i][0, 0], trilogy_averages[i][0, 1], trilogy_averages[i][0, 2],"--> 100% increase")
+    if average1 < average2 and average2 < average3:
+        print(average1, average2, average3, '--> 100% increase')
+        print(ratings[i][0])
+        complete_increase = complete_increase + 1
+
 
 print("Total number of trilogies are", totaltrilogies)
 percentage_decrease = (complete_decrease/totaltrilogies)*100
