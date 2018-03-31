@@ -44,17 +44,18 @@ print(trilogy_stdev)
 print(trilogy_nratings)
 print(trilogy_deltas)
 
-# Plotting some shit
+# Plotting the average movie rating for movie 1, 2 and 3 for each trilogy. (The result is a bit of a mess)
 x = np.array([1, 2, 3])
 for i in range(0, len(trilogy_averages)):
     for j in range(0, 3):
         if np.isnan(trilogy_averages[i][0, j]) == True:
             break
         y = trilogy_averages[i][:]
-        #plt.plot(x, y[0])
-#plt.show()
+        plt.plot(x, y[0])
+plt.show()
 
 
+# Computing the difference in average rating between movie 1 and 2, movie 2 and 3, and movie 1 and 3
 delta12 = []
 delta23 = []
 delta13 = []
@@ -69,6 +70,7 @@ for i in range(0, len(trilogy_deltas)):
         if j == 2:
             delta13.append(trilogy_deltas[i][0, 2])
 
+# Making a nicely formatted histogram plot of the differences in average rating data
 bins = np.arange(-2.5, 2.5, 0.25)
 
 fig, (ax1, ax2, ax3) = plt.subplots(3, 1, sharex=True)
@@ -89,10 +91,11 @@ ax3.text(1.5, 25, 'Movie 1 & 3')
 ax3.axvline(x=0, color='r', linestyle='--')
 ax3.set_xlabel('Difference in Average Rating')
 
-
 fig.subplots_adjust(hspace=0.05)
 plt.show()
 
+
+# Determine the progression of movie ratings. Compare rating of movie 1 to movie 2, etc. 
 totaltrilogies = 0
 complete_decrease = 0
 two_decrease_three_increase = 0
